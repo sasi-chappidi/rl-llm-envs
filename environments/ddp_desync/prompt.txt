@@ -1,0 +1,18 @@
+Task: Fix a silent distributed training bug (PyTorch DDP desync).
+
+You are in a Linux VM with a repo in /workspace (this folder).
+You must fix train.py so that when we run distributed training with 2 processes,
+both ranks stay synchronized (same model weights).
+
+Command the evaluator will run:
+  torchrun --standalone --nproc_per_node=2 train.py --steps 200
+
+Requirements:
+- Must run successfully on CPU.
+- Must not disable DDP.
+- Must not force world_size=1.
+- Must produce artifacts_rank0.pt and artifacts_rank1.pt.
+- Weights across ranks must match (within tolerance).
+- Deterministic for a fixed seed.
+
+You may edit files in this workspace only.
