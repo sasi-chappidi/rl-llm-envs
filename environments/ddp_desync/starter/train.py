@@ -35,7 +35,7 @@ def main():
     ddp_model = DDP(model)
 
     # BUG: optimizer + forward use raw model, not ddp_model => silent desync
-    opt = torch.optim.Adam(model.parameters(), lr=2e-3)
+    opt = torch.optim.Adam(ddp_model.parameters(), lr=2e-3)
     loss_fn = nn.CrossEntropyLoss()
 
     model.train()
@@ -45,7 +45,7 @@ def main():
         yb = y[idx]
 
         opt.zero_grad(set_to_none=True)
-        logits = model(xb)  # should be ddp_model(xb)
+        logits = ddp_model(xb)  # should be ddp_model(xb)
         loss = loss_fn(logits, yb)
         loss.backward()
         opt.step()
